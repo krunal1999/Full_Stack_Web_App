@@ -78,6 +78,22 @@ function RegistrationPage() {
             )}
           </div>
 
+          <div className="relative">
+            <InputBox
+              {...register("confirmPassword", { required: "Password is required" })}
+              type="password"
+              name="confirmPassword"
+              placeholder="confirm password"
+            ></InputBox>
+
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-2">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
+
           <div className="flex justify-between items-center">
             <Button
               type="submit"
