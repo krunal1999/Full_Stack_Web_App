@@ -1,19 +1,14 @@
 import { registerSchema, loginSchema } from "../validation/userValidation.js";
-
+import ApiError from "../utils/ApiError.js";
 
 const validateRegistration = (req, res, next) => {
   const { error } = registerSchema.validate(req.body, { abortEarly: false });
 
   if (error) {
     const errorMessages = error.details.map((err) => err.message);
-    return res.status(400).json({
-      success: false,
-      errors: errorMessages,
-    });
+    return res.status(400).json(new ApiError(400, errorMessages, error));
   }
-
-  // console.log("validation checked");
-
+  console.log("validation checked");
   next();
 };
 
@@ -22,10 +17,7 @@ const validateLogin = (req, res, next) => {
 
   if (error) {
     const errorMessages = error.details.map((err) => err.message);
-    return res.status(400).json({
-      success: false,
-      errors: errorMessages,
-    });
+    return res.status(400).json(new ApiError(400, errorMessages, error));
   }
 
   next();

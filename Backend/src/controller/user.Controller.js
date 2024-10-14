@@ -3,6 +3,10 @@ import { User } from "../models/user.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
+const options = {
+  httpOnly: false,
+  secure: true,
+};
 /*
 steps for registration function
 1. data is validated in middleware
@@ -12,6 +16,20 @@ steps for registration function
 5. if user is created successful send response
 6. if user not created send error
 */
+const generateAccessTokenWithID = async (userId) => {
+  try {
+    const currentUser = await User.findById(userId);
+    const accessToken = await currentUser.generateAccessToken();
+    //console.log("token", accessToken);
+    currentUser.token = accessToken;
+
+    await currentUser.save({ validateBeforeSave: false });
+
+    return accessToken;
+  } catch (error) {
+    throw new ApiError(500, "Token Not Generated");
+  }
+};
 
 export const registerUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
@@ -19,7 +37,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   const existingUser = await User.findOne({ email });
 
-  console.log(existingUser);
+  // console.log(existingUser);
   if (existingUser) {
     throw new ApiError(400, {}, "User Already Exist");
   }
@@ -32,7 +50,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   // check if user is saved or not
   const createdUser = await User.findById(newUser._id).select("-password");
-  
+
   if (!createdUser) {
     throw new ApiError(500, "User Not Created Server Error");
   }
@@ -40,4 +58,44 @@ export const registerUser = asyncHandler(async (req, res) => {
   return res
     .status(201)
     .json(new ApiResponse(201, createdUser, "User Created"));
+});
+
+/*
+Steps
+1. Get the data
+2. validate data
+3. check if user exist
+  a. if then match the passwords
+  b. else throw error
+4.if user exist - generate new jwt token 
+5. return proper success response or error response
+*/
+export const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  // console.log(email);
+
+  // check if user exist or not
+  const existedUser = await User.findOne({ email });
+
+  if (!existedUser) {
+    throw new ApiError(400, {}, "User not found");
+  }
+
+  // check the credential, match the password
+  const matchPass = await existedUser.isPasswordCorrect(password);
+
+  if (!matchPass) {
+    throw new ApiError(401, {}, "User or Password does not match");
+  }
+
+  const accessToken = await generateAccessTokenWithID(existedUser._id);
+
+  const loggedUser = await User.findById(existedUser._id).select("-password");
+
+  // console.log(loggedUser);
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .json(new ApiResponse(200, { loggedUser }, "user logged"));
 });

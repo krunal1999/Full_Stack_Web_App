@@ -31,7 +31,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.generateAccessToken = function () {
-  Jwt.sign(
+  return Jwt.sign(
     {
       _id: this._id,
       email: this.email,
@@ -42,6 +42,10 @@ userSchema.methods.generateAccessToken = function () {
       expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
     }
   );
+};
+
+userSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
 export const User = mongoose.model("User", userSchema);

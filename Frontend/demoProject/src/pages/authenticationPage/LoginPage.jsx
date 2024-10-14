@@ -1,12 +1,15 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../componets/formComponets/Button";
 import InputBox from "../../componets/formComponets/InputBox";
 import { loginSchema } from "../../schema/userSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { sanitizeLoginData } from "../../sanitization/userInputSanitization.js";
+import { authenticationService } from "./../../services";
 
 function LoginPage() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -21,8 +24,30 @@ function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  // sanitize the data, then make axios request and show proper response msg
+  const onSubmit = async (data) => {
+    const sanitizeData = sanitizeLoginData(data);
+
+    try {
+      const response = await authenticationService.loginUser(sanitizeData);
+
+      console.log(response.data);
+      if (response.status === 200) {
+        console.log("User logged In Successfull");
+        navigate("/");
+      } else if (response.status === 401) {
+        console.log("User Credential Not Match");
+        navigate("/login");
+      } else {
+        console.log("Try Again");
+        navigate("/login");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errors?.errors || error.message;
+      console.log(errorMessage);
+      navigate("/login");
+    }
   };
 
   return (

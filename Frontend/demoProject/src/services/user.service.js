@@ -9,6 +9,10 @@ class AuthenticationService {
   registerUser(data) {
     return axiosInstance.post(`${config.serverUrl}/user/register`, data);
   }
+
+  loginUser(data) {
+    return axiosInstance.post(`${config.serverUrl}/user/login`, data);
+  }
 }
 
 const authenticationService = new AuthenticationService();
