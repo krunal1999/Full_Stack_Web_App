@@ -1,5 +1,5 @@
 const conf = {
-  Url: String(import.meta.env.VITE_APPWRITE_URL),
+  serverUrl: String(import.meta.env.VITE_SERVER_URL),
 };
 
 export default conf;

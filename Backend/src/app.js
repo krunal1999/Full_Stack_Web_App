@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./routes/index.js";
-
+import errorHandler from "./middleware/errorHandler.middleware.js";
 
 const app = express();
 
@@ -33,6 +33,8 @@ app.get("/", (req, res) => {
   res.send("hello server");
 });
 
-app.use(router)
+app.use(router);
+
+app.use(errorHandler);
 
 export default app;

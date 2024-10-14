@@ -1,12 +1,15 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../componets/formComponets/Button";
 import InputBox from "../../componets/formComponets/InputBox";
 import { registrationSchema } from "../../schema/userSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { sanitizeRegistrationData } from "./../../sanitization/userInputSanitization";
+import { authenticationService } from "../../services";
 
 function RegistrationPage() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -22,8 +25,30 @@ function RegistrationPage() {
     resolver: zodResolver(registrationSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const sanitizeData = sanitizeRegistrationData(data);
+    const userData = {
+      email: sanitizeData.email,
+      username: sanitizeData.username,
+      password: sanitizeData.password,
+    };
+
+    try {
+      const response = await authenticationService.registerUser(userData);
+
+      if (response.status === 201) {
+        reset();
+        navigate("/login");
+        console.log("User Created");
+      } else {
+        console.log("Email is already in use. Registration failed.");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.errors?.errors || error.message;
+      console.log(errorMessage);
+      navigate("/register");
+    }
   };
 
   return (
@@ -80,7 +105,9 @@ function RegistrationPage() {
 
           <div className="relative">
             <InputBox
-              {...register("confirmPassword", { required: "Password is required" })}
+              {...register("confirmPassword", {
+                required: "Password is required",
+              })}
               type="password"
               name="confirmPassword"
               placeholder="confirm password"
@@ -92,7 +119,6 @@ function RegistrationPage() {
               </p>
             )}
           </div>
-
 
           <div className="flex justify-between items-center">
             <Button

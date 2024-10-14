@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+
 const baseSchema = z.object({
   email: z
     .string("Please Enter Valid Email ID")
@@ -40,3 +41,4 @@ export const registrationSchema = baseSchema
   });
 
 export const loginSchema = baseSchema;
+
