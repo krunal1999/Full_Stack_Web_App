@@ -13,6 +13,14 @@ class AuthenticationService {
   loginUser(data) {
     return axiosInstance.post(`${config.serverUrl}/user/login`, data);
   }
+
+  fetchUserById(id) {
+    return axiosInstance.get(`${config.serverUrl}/user/${id}`);
+  }
+  fetchUserDetails() {
+    return axiosInstance.get(`${config.serverUrl}/user/`);
+  }
+  
 }
 
 const authenticationService = new AuthenticationService();

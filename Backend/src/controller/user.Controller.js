@@ -20,8 +20,7 @@ const generateAccessTokenWithID = async (userId) => {
   try {
     const currentUser = await User.findById(userId);
     const accessToken = await currentUser.generateAccessToken();
-    //console.log("token", accessToken);
-    currentUser.token = accessToken;
+    currentUser.accessToken = accessToken;
 
     await currentUser.save({ validateBeforeSave: false });
 
@@ -90,7 +89,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const accessToken = await generateAccessTokenWithID(existedUser._id);
 
-  const loggedUser = await User.findById(existedUser._id).select("-password");
+  const loggedUser = await User.findById(existedUser._id).select("_id");
 
   // console.log(loggedUser);
 
@@ -98,4 +97,39 @@ export const loginUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("accessToken", accessToken, options)
     .json(new ApiResponse(200, { loggedUser }, "user logged"));
+});
+
+export const getUserById = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const existedUser = await User.findById(id).select("-password");
+
+  const userResponse = {
+    username: existedUser.username,
+    email: existedUser.email,
+  };
+
+  if (!userResponse) {
+    throw new ApiError(400, {}, "User not found");
+  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, userResponse, "user details"));
+});
+
+export const getUser = asyncHandler(async (req, res) => {
+
+  const id = req.user._id;
+  const existedUser = await User.findById(id).select("-password");
+
+  const userResponse = {
+    username: existedUser.username,
+    email: existedUser.email,
+  };
+
+  if (!userResponse) {
+    throw new ApiError(400, {}, "User not found");
+  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, userResponse, "user details"));
 });

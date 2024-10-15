@@ -7,9 +7,13 @@ import { loginSchema } from "../../schema/userSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { sanitizeLoginData } from "../../sanitization/userInputSanitization.js";
 import { authenticationService } from "./../../services";
+import { useDispatch } from "react-redux";
+import { login } from "../../reducers/authenticationSlice.js";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -31,10 +35,14 @@ function LoginPage() {
     try {
       const response = await authenticationService.loginUser(sanitizeData);
 
-      console.log(response.data);
+      // console.log(response.data);
       if (response.status === 200) {
+        const user = response?.data.data.loggedUser._id;
+
+        dispatch(login(user));
+
         console.log("User logged In Successfull");
-        navigate("/");
+        navigate("/protect/landingpage");
       } else if (response.status === 401) {
         console.log("User Credential Not Match");
         navigate("/login");
