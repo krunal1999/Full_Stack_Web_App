@@ -66,3 +66,29 @@ Follow the steps below to set up and run the project on your local machine.
     ```
 7. Usage
 - Once the application is running, you can access the frontend in your web browser at http://localhost:5173
+
+8. New Collection.postman_collection.json , Import this json file in Postman to see Integration Api Testing with Examples.
+
+
+9. Note - All the below points are covered in the project except the unit Testing for frontend application.
+
+● Use React on the FrontEnd (Extra points will be given for using Redux for state management).
+
+● Use MongoDB or your preferred choice to store the user data.
+
+● On the frontend create aproject in React that consumes these API endpoints and create a decent looking Front End for a login box and register page.
+
+● Extrapoints for good validation of registration and login page, including valid email address, adequate passwords and ensuring that the user credentials are unique when registering.
+
+● Extrapoints for making the login page responsive.
+
+● Extrapoints given for making the pages look professional and easy to use.
+
+● Extrapoints for adding a home page and usable navigation
+
+● Extrapoints for using and supplying unit testing.  
+
+● Extrapoints for using JWT tokens for authentication
+
+● Createtheproject in GitHub and provide the link
+● Createasimple readme file that explains how to run the code
