@@ -1,61 +1,27 @@
-// src/HomePage.jsx
 import React from "react";
 
-const HomePage = () => {
-  const dummyData = {
-    title: "Welcome to ABC Manufacturing Co.",
-    subtitle: "Innovating the Future of Manufacturing",
-    description:
-      "We specialize in high-quality manufacturing solutions tailored to meet the needs of our clients.",
-    services: [
-      {
-        id: 1,
-        name: "Precision Machining",
-        description: "Expert machining services for complex components.",
-        icon: "⚙️",
-      },
-      {
-        id: 2,
-        name: "Assembly Line Production",
-        description: "Efficient assembly line solutions for mass production.",
-        icon: "🏭",
-      },
-      {
-        id: 3,
-        name: "Quality Control",
-        description: "Rigorous testing and quality assurance processes.",
-        icon: "✔️",
-      },
-    ],
-    testimonials: [
-      {
-        id: 1,
-        name: "John Doe",
-        text: "ABC Manufacturing provided exceptional service and quality products that exceeded our expectations.",
-      },
-      {
-        id: 2,
-        name: "Jane Smith",
-        text: "The team at ABC Manufacturing is professional and efficient. Highly recommended!",
-      },
-    ],
-    contactInfo: {
-      phone: "+1 (555) 123-4567",
-      email: "info@abcmanufacturing.com",
-    },
-  };
+import { dummyData } from "../../assets/data/dummyData";
 
+const HomePage = () => {
   return (
     <div className="bg-gray-100">
+      {/* Hero Section */}
       <div className="container mx-auto py-12 text-center">
         <h1 className="text-5xl font-bold text-gray-800">{dummyData.title}</h1>
         <h2 className="text-3xl text-gray-600 mt-2">{dummyData.subtitle}</h2>
         <p className="mt-4 text-lg text-gray-500 max-w-xl mx-auto">
           {dummyData.description}
         </p>
+        <a
+          href="#services"
+          className="mt-6 inline-block bg-blue-600 text-white px-6 py-3 rounded-full shadow-md hover:bg-blue-500 transition"
+        >
+          Explore Services
+        </a>
       </div>
 
-      <section className="container mx-auto py-12">
+      {/* Services Section */}
+      <section id="services" className="container mx-auto py-12">
         <h2 className="text-4xl font-semibold text-center mb-8">
           Our Services
         </h2>
@@ -73,6 +39,7 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Testimonials Section */}
       <section className="bg-gray-200 py-12">
         <div className="container mx-auto text-center">
           <h2 className="text-4xl font-semibold mb-8">What Our Clients Say</h2>
@@ -91,7 +58,8 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
+      
+       {/* Contact Section  */}
       <section className="container mx-auto py-12 text-center">
         <h2 className="text-4xl font-semibold mb-4">Get In Touch</h2>
         <p className="text-lg text-gray-600">
@@ -101,7 +69,7 @@ const HomePage = () => {
           Email:{" "}
           <a
             href={`mailto:${dummyData.contactInfo.email}`}
-            className="text-blue-600"
+            className="text-blue-600 hover:underline"
           >
             {dummyData.contactInfo.email}
           </a>

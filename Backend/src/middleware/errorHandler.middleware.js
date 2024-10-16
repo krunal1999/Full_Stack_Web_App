@@ -1,5 +1,7 @@
 import ApiError from "../utils/ApiError.js";
 
+
+// Handle all the error 
 const errorHandler = (err, req, res, next) => {
   console.error(err);
   // console.log(" error was caught in middleware");

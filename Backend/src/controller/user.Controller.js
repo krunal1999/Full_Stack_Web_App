@@ -7,15 +7,7 @@ const options = {
   httpOnly: false,
   secure: true,
 };
-/*
-steps for registration function
-1. data is validated in middleware
-2. check if email is unique , if no send error
-3. if yes then create the new account , send success
-4. before creating hash the password, logic in user.model
-5. if user is created successful send response
-6. if user not created send error
-*/
+
 const generateAccessTokenWithID = async (userId) => {
   try {
     const currentUser = await User.findById(userId);
@@ -30,6 +22,15 @@ const generateAccessTokenWithID = async (userId) => {
   }
 };
 
+/*
+steps for registration function
+1. data is validated in middleware
+2. check if email is unique , if no send error
+3. if yes then create the new account , send success
+4. before creating hash the password, logic in user.model
+5. if user is created successful send response
+6. if user not created send error
+*/
 export const registerUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
   // console.log(` ${email} ${username} ${password}`);
@@ -38,7 +39,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   // console.log(existingUser);
   if (existingUser) {
-    throw new ApiError(400, {}, "User Already Exist");
+    throw new ApiError(409, {}, "User Already Exist");
   }
 
   const newUser = await User.create({
@@ -117,7 +118,6 @@ export const getUserById = asyncHandler(async (req, res) => {
 });
 
 export const getUser = asyncHandler(async (req, res) => {
-
   const id = req.user._id;
   const existedUser = await User.findById(id).select("-password");
 

@@ -9,4 +9,9 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  test:{
+    globals:true,
+    envirnoment: 'jsdom',
+    setupFiles: './src/test/setup.js'
+  }
 })

@@ -1,18 +1,19 @@
-import React from "react";
-
-import { Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ProtectedRoute() {
+  const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem("isAuthenticated");
-  const user = useSelector((state) => state.auth.user);
-  console.log(user)
 
-  if (isAuthenticated) {
-    return <Outlet />;
-  } else {
-    return <Navigate to="/" replace />;
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      toast.error("You are not authorized. Please log in.");
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  return isAuthenticated ? <Outlet /> : null;
 }
 
 export default ProtectedRoute;

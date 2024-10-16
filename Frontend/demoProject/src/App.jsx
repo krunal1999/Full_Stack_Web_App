@@ -13,6 +13,8 @@ import { Provider } from "react-redux";
 import { store } from "./store/store";
 import LandingPage from "./pages/LandingPage";
 import ProtectedRoute from "./layout/ProtectedRoute";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function App() {
   const router = createBrowserRouter(
@@ -25,7 +27,7 @@ function App() {
           <Route path="register" element={<RegistrationPage />} />
 
 
-          //private router
+          //private routes
           <Route path="protect" element={<ProtectedRoute />}>
             <Route path="landingpage" element={<LandingPage />} />
           </Route>
@@ -37,6 +39,13 @@ function App() {
   return (
     <>
       <Provider store={store}>
+        <ToastContainer
+          theme="dark"
+          position="top-right"
+          autoClose={3000}
+          closeOnClick
+          pauseOnHover={false}
+        />
         <RouterProvider router={router}></RouterProvider>
       </Provider>
     </>

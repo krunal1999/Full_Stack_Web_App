@@ -6,6 +6,9 @@ const LandingPage = () => {
   const { user } = useFetchUserDetails();
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem("isAuthenticated");
+
+  console.log(userData)
 
   useEffect(() => {
     if (user) {
@@ -13,12 +16,15 @@ const LandingPage = () => {
     }
   }, [user]);
 
+  // console.log(user)
+
   return (
+    
     <div className="landing-page min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 flex flex-col justify-center items-center text-white">
       <div className="text-center p-8">
         <h1 className="text-4xl font-bold mb-6">Welcome Back</h1>
 
-        {user ? (
+        {userData ? (
           <div className="bg-white text-black p-6 rounded-lg shadow-lg max-w-md mx-auto">
             <p className="text-lg font-semibold">
               Hello, <span className="text-blue-600">{userData?.username}</span>

@@ -1,6 +1,7 @@
 import { registerSchema, loginSchema } from "../validation/userValidation.js";
 import ApiError from "../utils/ApiError.js";
 
+// validate incoming data using Joi
 const validateRegistration = (req, res, next) => {
   const { error } = registerSchema.validate(req.body, { abortEarly: false });
 
